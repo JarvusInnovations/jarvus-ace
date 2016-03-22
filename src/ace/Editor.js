@@ -117,33 +117,35 @@ Ext.define('Jarvus.ace.Editor', {
 
     attachEvents: function() {
         var me = this,
-            domains = me.getSubscribe();
+            subscribe = me.getSubscribe();
 
-        if (domains) {
-            Ext.iterate(domains, function(domain,events) {
-                Ext.each(events, function(e) {
-                    me.bubbleEvent(domain,e);
+        if (subscribe) {
+            Ext.iterate(subscribe, function(eventClass,eventNames) {
+                Ext.each(eventNames, function(eventName) {
+                    me.bubbleEvent(eventClass, eventName);
                 });
             });
         }
     },
 
-    bubbleEvent: function(eventDomain, eventName) {
+    bubbleEvent: function(eventClass, eventName) {
         var me = this,
-            editorClass = null;
+            aceClass = null;
 
-        switch (eventDomain) {
+        switch (eventClass) {
             case 'Editor':
-                editorClass = me.getEditor();
+                aceClass = me.getEditor();
                 break;
             case 'EditorSession':
-                editorClass = me.getEditor().getSession();
+                aceClass = me.getEditor().getSession();
                 break;
+            default:
+                console.warn(eventClass+' is not a recognized Ace Editor class');
         }
 
-        if (editorClass) {
-            editorClass.on(eventName, function() {
-                me.fireEvent((eventDomain+eventName).toLowerCase(),arguments);
+        if (aceClass) {
+            aceClass.on(eventName, function() {
+                me.fireEvent((eventClass+eventName).toLowerCase(),arguments);
             });
         }
     },
