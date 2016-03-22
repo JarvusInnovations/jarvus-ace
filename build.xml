@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<project name="jarvus-ace-editor" default=".help">
+<project name="jarvus-ace" default=".help">
     <!--
     The build-impl.xml file imported here contains the guts of the build process. It is
     a great idea to read that file to understand how the process works, but it is best to
@@ -27,7 +27,7 @@
 
             <target name="-before-init"/>
             <target name="-after-init"/>
-        
+
         The "build" target performs the call to Sencha Cmd to build the application.
 
             <target name="-before-build"/>

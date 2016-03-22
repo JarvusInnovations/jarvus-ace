@@ -1,5 +1,5 @@
 {
-    "name": "jarvus-ace-editor",
+    "name": "jarvus-ace",
     "namespace": "Jarvus.ace.editor",
     "type": "code",
     "toolkit": "${args.toolkit}",
