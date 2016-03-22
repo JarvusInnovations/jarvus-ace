@@ -26,7 +26,6 @@ Ext.define('Jarvus.ace.Editor', {
 
     afterRender: function() {
         var me = this;
-        console.log('afterrender');
 
         me.initEditor();
         me.syncSize();
@@ -54,7 +53,6 @@ Ext.define('Jarvus.ace.Editor', {
     },
 
     applyTheme: function(theme) {
-        console.log('applying theme: '+theme);
         var editor = this.getEditor();
 
         if (editor) {
@@ -145,7 +143,6 @@ Ext.define('Jarvus.ace.Editor', {
 
         if (editorClass) {
             editorClass.on(eventName, function() {
-                console.log((eventDomain+eventName).toLowerCase());
                 me.fireEvent((eventDomain+eventName).toLowerCase(),arguments);
             });
         }
