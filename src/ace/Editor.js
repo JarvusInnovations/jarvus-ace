@@ -133,11 +133,17 @@ Ext.define('Jarvus.ace.Editor', {
             aceClass = null;
 
         switch (eventClass) {
+            case 'Document':
+                aceClass = me.getEditor().getSession().getDocument();
+                break;
             case 'Editor':
                 aceClass = me.getEditor();
                 break;
             case 'EditorSession':
                 aceClass = me.getEditor().getSession();
+                break;
+            case 'Selection':
+                aceClass = me.getEditor().getSession().getSelection();
                 break;
             default:
                 console.warn(eventClass+' is not a recognized Ace Editor class');
@@ -145,6 +151,7 @@ Ext.define('Jarvus.ace.Editor', {
 
         if (aceClass) {
             aceClass.on(eventName, function() {
+                //console.log((eventClass+eventName).toLowerCase());
                 me.fireEvent((eventClass+eventName).toLowerCase(),arguments);
             });
         }
