@@ -3,6 +3,9 @@ Ext.define('Jarvus.ace.Editor', {
     extend: 'Ext.Component',
     xtype: 'jarvus-ace-editor',
 
+    stateful: true,
+    stateId: 'jarvus-ace-editor',
+
     config: {
         editor: null,
         parentContainer: null,
@@ -40,8 +43,11 @@ Ext.define('Jarvus.ace.Editor', {
         }
         editor = me.getEditor();
 
+        me.applyState();
+
         // Config options
-        me.setTheme(me.getTheme());
+        //me.setTheme(me.getTheme());
+        editor.setTheme(me.getTheme());
         me.setMode(me.getMode());
         me.setFontSize(me.getFontSize());
         me.setKeyboardHandler(me.getKeyboardHandler());
@@ -59,6 +65,15 @@ Ext.define('Jarvus.ace.Editor', {
             editor.setTheme(theme);
         }
         return theme;
+    },
+
+    updateTheme: function() {
+        var me = this;
+
+        if (me.getEditor()) {
+            me.saveState();
+            me.fireEvent('themechange');
+        }
     },
 
     applyMode: function(mode) {
@@ -154,6 +169,20 @@ Ext.define('Jarvus.ace.Editor', {
                 //console.log((eventClass+eventName).toLowerCase());
                 me.fireEvent((eventClass+eventName).toLowerCase(),arguments);
             });
+        }
+    },
+
+    getState: function() {
+        return { theme: this.getTheme() };
+    },
+
+    applyState: function(state) {
+        var me = this;
+
+        if (state) {
+            if (state.theme) {
+                me.setTheme(state.theme);
+            }
         }
     },
 
