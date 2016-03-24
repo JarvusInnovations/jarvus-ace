@@ -87,8 +87,8 @@ Ext.define('Jarvus.ace.Editor', {
         }
         editor = me.getEditor();
 
+        me.initSettingsFields();
         editor.setOptions(options);
-
         me.attachEvents();
     },
 
@@ -122,6 +122,18 @@ Ext.define('Jarvus.ace.Editor', {
         var options = this.getOptions();
 
         return options[option];
+    },
+
+    initSettingsFields: function() {
+        var fields = Ext.ComponentQuery.query('field[aceSettingsField]'),
+            fieldsLen = fields.length,
+            i = 0;
+
+        console.log(fieldsLen);
+
+        for (;i<fieldsLen;i++) {
+            fields[i].setEditor(this);
+        }
     },
 
     attachEvents: function() {
