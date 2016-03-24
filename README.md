@@ -11,7 +11,7 @@ The jarvus-ace component allows you to configure Ace options and subscribe to Ac
 
 ### Ace Options
 The jarvus-ace component has an "options" configuration parameter that allows for the configuration of available
-ACE options when the componet is extended or created inline. To see a full list of available options and thier
+ACE options when the component is extended or created inline. To see a full list of available options and their
 defaults, see the options object in the config attribute of Jarvus.ace.Editor located at src/ace/Editor.js
 
 Example:
@@ -27,7 +27,7 @@ Example:
     },
 ```
 
-To set options after component instantiation, doOptionChange(option, value) method of Jarvus.ace.Editor.
+To set options after component instantiation, use the ``OptionChange(option, value)`` method of Jarvus.ace.Editor.
 
 Example:
 ```
