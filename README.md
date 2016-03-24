@@ -27,7 +27,7 @@ Example:
     },
 ```
 
-To set options after component instantiation, use the ``OptionChange(option, value)`` method of Jarvus.ace.Editor.
+To set options after component instantiation, use the ``doOptionChange(option, value)`` method of Jarvus.ace.Editor.
 
 Example:
 ```
