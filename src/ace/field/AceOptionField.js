@@ -50,7 +50,6 @@ Ext.define('Jarvus.ace.field.AceOptionField', {
         me.addListeners();
 
         editor.on('optionschange', function() {
-            console.log('optionschange');
             me.displayCurrentValue();
         });
     },
@@ -68,8 +67,8 @@ Ext.define('Jarvus.ace.field.AceOptionField', {
 
     selectCurrent: function() {
         var me = this,
-            ace = me.getEditor().getEditor(),
-            rec = me.getStore().query('value',ace.getOption(me.getOption())).first();
+            val = me.getEditor().getOption(me.getOption());
+            rec = me.getStore().query('value',val).first();
 
         if (rec) {
             Ext.Function.defer(me.select,100,me,[rec]);
@@ -78,8 +77,7 @@ Ext.define('Jarvus.ace.field.AceOptionField', {
 
     checkCurrent: function() {
         var me = this,
-            ace = me.getEditor().getEditor(),
-            val = ace.getOption(me.getOption());
+            val = me.getEditor().getOption(me.getOption());
 
         me.setValue(val);
     }
