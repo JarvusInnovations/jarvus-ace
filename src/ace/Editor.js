@@ -5,20 +5,64 @@ Ext.define('Jarvus.ace.Editor', {
 
     stateful: true,
     stateId: 'jarvus-ace-editor',
+    stateEvents: ['optionupdate'],
 
     config: {
         editor: null,
         parentContainer: null,
 
-        theme: '',
-        mode: '',
-        fontSize: 12,
-        keyboardHandler: '',
-        showPrintMargin: false,
-        printMarginColumn: 80,
-        useWrapMode: false,
+        options: {
+            animatedScroll: false,
+            autoScrollEditorIntoView: undefined,
+            behavioursEnabled: true,
+            cursorStyle: "ace",
+            displayIndentGuides: true,
+            dragDelay: 0,
+            dragEnabled: true,
+            enableBlockSelect: true,
+            enableMultiselect: true,
+            fadeFoldWidgets: false,
+            firstLineNumber: 1,
+            fixedWidthGutter: undefined,
+            focusTimout: 0,
+            //foldStyle: undefined, //TODO: error: misspelled option "foldStyle"
+            fontFamily: undefined,
+            fontSize: 12,
+            hScrollBarAlwaysVisible: false,
+            highlightActiveLine: true,
+            highlightGutterLine: true,
+            highlightSelectedWord: true,
+            indentedSoftWrap: true,
+            keyboardHandler: undefined,
+            maxLines: undefined,
+            mergeUndoDeltas: true,
+            minLines: undefined,
+            mode: "ace/mode/text",
+            newLineMode: "auto",
+            overwrite: false,
+            printMargin: 80,
+            printMarginColumn: 80,
+            readOnly: false,
+            scrollPastEnd: 0,
+            scrollSpeed: 2,
+            selectionStyle: "line",
+            showFoldWidgets: true,
+            showGutter: true,
+            showInvisibles: false,
+            showLineNumbers: true,
+            showPrintMargin: true,
+            tabSize: 4,
+            theme: undefined,
+            tooltipFollowsMouse: true,
+            useSoftTabs: true,
+            useWorker: true,
+            vScrollBarAlwaysVisible: false,
+            wrap: "off",
+            wrapBehavioursEnabled: true
+        },
 
         subscribe: null
+
     },
 
     initComponent: function() {
@@ -36,6 +80,7 @@ Ext.define('Jarvus.ace.Editor', {
 
     initEditor: function() {
         var me = this,
+            options = me.getOptions(),
             editor;
 
         if (!me.getEditor()) {
@@ -43,91 +88,31 @@ Ext.define('Jarvus.ace.Editor', {
         }
         editor = me.getEditor();
 
-        me.applyState();
-
-        // Config options
-        //me.setTheme(me.getTheme());
-        editor.setTheme(me.getTheme());
-        me.setMode(me.getMode());
-        me.setFontSize(me.getFontSize());
-        me.setKeyboardHandler(me.getKeyboardHandler());
-        me.setShowPrintMargin(me.getShowPrintMargin());
-        me.setPrintMarginColumn(me.getPrintMarginColumn());
-        me.setUseWrapMode(me.getUseWrapMode());
+        editor.setOptions(options);
 
         me.attachEvents();
     },
 
-    applyTheme: function(theme) {
-        var editor = this.getEditor();
+    doOptionChange: function(option,value) {
+        var me = this,
+            editor = me.getEditor();
 
-        if (editor) {
-            editor.setTheme(theme);
-        }
-        return theme;
+        editor.setOption(option,value);
+        me.setOptions(editor.getOptions());
+        me.fireEvent('optionchange');
     },
 
-    updateTheme: function() {
+    applyOptions: function(options) {
+        return Ext.apply({},options);
+    },
+
+    updateOptions: function() {
         var me = this;
 
         if (me.getEditor()) {
             me.saveState();
-            me.fireEvent('themechange');
+            me.fireEvent('optionschange');
         }
-    },
-
-    applyMode: function(mode) {
-        var editor = this.getEditor();
-
-        if (editor) {
-            editor.getSession().setMode(mode);
-        }
-        return mode;
-    },
-
-    applyFontSize: function(fontSize) {
-        var editor = this.getEditor();
-
-        if (editor) {
-            editor.setFontSize(fontSize);
-        }
-        return fontSize;
-    },
-
-    applyKeyboardHandler: function(keyboardHandler) {
-        var editor = this.getEditor();
-
-        if (editor) {
-            editor.setKeyboardHandler(keyboardHandler);
-        }
-        return keyboardHandler;
-    },
-
-    applyShowPrintMargin: function(showPrintMargin) {
-        var editor = this.getEditor();
-
-        if (editor) {
-            editor.setShowPrintMargin(showPrintMargin);
-        }
-        return showPrintMargin;
-    },
-
-    applyPrintMarginColumn: function(printMarginColumn) {
-        var editor = this.getEditor();
-
-        if (editor) {
-            editor.setPrintMarginColumn(printMarginColumn);
-        }
-        return printMarginColumn;
-    },
-
-    applyUseWrapMode: function(useWrapMode) {
-        var editor = this.getEditor();
-
-        if (editor) {
-            editor.getSession().setUseWrapMode(useWrapMode);
-        }
-        return useWrapMode;
     },
 
     attachEvents: function() {
@@ -173,15 +158,19 @@ Ext.define('Jarvus.ace.Editor', {
     },
 
     getState: function() {
-        return { theme: this.getTheme() };
+        var me = this;
+
+        return {options: me.getOptions()};
     },
 
     applyState: function(state) {
-        var me = this;
+        var me = this,
+            options = Ext.apply({},me.getOptions());
 
         if (state) {
-            if (state.theme) {
-                me.setTheme(state.theme);
+            if (state.options) {
+                Ext.apply(options,state.options);
+                me.setOptions(options);
             }
         }
     },
