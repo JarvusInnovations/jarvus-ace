@@ -94,10 +94,11 @@ Ext.define('Jarvus.ace.Editor', {
 
     doOptionChange: function(option,value) {
         var me = this,
-            editor = me.getEditor();
+            options = me.getOptions();
 
-        editor.setOption(option,value);
-        me.setOptions(editor.getOptions());
+        options[option] = value;
+        me.setOptions(options);
+
         me.fireEvent('optionchange');
     },
 
@@ -106,12 +107,21 @@ Ext.define('Jarvus.ace.Editor', {
     },
 
     updateOptions: function() {
-        var me = this;
+        var me = this,
+            editor = me.getEditor(),
+            options = me.getOptions();
 
-        if (me.getEditor()) {
+        if (editor) {
             me.saveState();
+            editor.setOptions(options);
             me.fireEvent('optionschange');
         }
+    },
+
+    getOption: function(option) {
+        var options = this.getOptions();
+
+        return options[option];
     },
 
     attachEvents: function() {
