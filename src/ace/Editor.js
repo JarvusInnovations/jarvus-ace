@@ -5,7 +5,6 @@ Ext.define('Jarvus.ace.Editor', {
 
     stateful: true,
     stateId: 'jarvus-ace-editor',
-    stateEvents: ['optionupdate'],
 
     config: {
         editor: null,
