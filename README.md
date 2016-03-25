@@ -60,6 +60,13 @@ Subscribed events will be fired by the jarvus-ace component with the ACE class n
 lower case.  So, if you subscribe to the change event in the Ace EditSession class, it will be fired by the jarvus-ace
 component as ``editsessionchange``
 
+### Form components for Ace Options
+There are form components in the src/ace/field directory that can be included in an application for run time
+modification of common ACE options.  These are simple extensions of Ext JS field classes with a mixin that handles
+interaction with the ACE editor.  You may require and isntantiate these classes n your application, or use them as
+templates if you wish to create a form component for an ACE option that is not handled by the existing form component
+classes.
+
 ## To do and known issues
 
 * While the jarvus-ace component should work with both Ext JS 6 modern and classic toolkits, the form components
