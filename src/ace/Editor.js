@@ -87,6 +87,9 @@ Ext.define('Jarvus.ace.Editor', {
         }
         editor = me.getEditor();
 
+        // TODO: Remove this when its absence no longer causes a warning in future ACE version
+        editor.$blockScrolling = 'Infinity',
+
         me.initSettingsFields();
         editor.setOptions(options);
         me.attachEvents();
@@ -125,14 +128,12 @@ Ext.define('Jarvus.ace.Editor', {
     },
 
     initSettingsFields: function() {
-        var fields = Ext.ComponentQuery.query('field[aceSettingsField]'),
+        var fields = Ext.ComponentQuery.query('field[aceSettingsField]{hasEditorItemId("editor-01")}'),
             fieldsLen = fields.length,
             i = 0;
 
-        console.log(fieldsLen);
-
         for (;i<fieldsLen;i++) {
-            fields[i].setEditor(this);
+            fields[i].setEditors(this);
         }
     },
 
