@@ -67,6 +67,11 @@ interaction with the ACE editor.  You may require and instantiate these classes 
 templates if you wish to create a form component for an ACE option that is not handled by the existing form component
 classes.
 
+### Demo application
+There is a simple demo application in the example directory.  The class defined in the example/app/view/editor/Panel.js
+file shows the inline creation of the jarvus-ace component.  The jarvus-ace component can also be extended to create a
+custom component.
+
 ## To do and known issues
 
 * While the jarvus-ace component should work with both Ext JS 6 modern and classic toolkits, the form components
