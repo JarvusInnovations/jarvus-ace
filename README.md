@@ -63,7 +63,7 @@ component as ``editsessionchange``
 ### Form components for Ace Options
 There are form components in the src/ace/field directory that can be included in an application for run time
 modification of common ACE options.  These are simple extensions of Ext JS field classes with a mixin that handles
-interaction with the ACE editor.  You may require and isntantiate these classes n your application, or use them as
+interaction with the ACE editor.  You may require and instantiate these classes in your application, or use them as
 templates if you wish to create a form component for an ACE option that is not handled by the existing form component
 classes.
 
