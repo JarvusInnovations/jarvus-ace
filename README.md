@@ -67,7 +67,9 @@ for adjusting ACE options in the src/ace/field directory will only work with the
 errors if your application uses the modern toolkit.  A solution to this issue may be to move these field components to
 their own repo with framework and toolkit specific branches.  For now, if you wish to use the jarvus-ace component with
 the modern toolkit, delete the files in the src/ace/field directory and you should be able to build successfully.
+
 * I am so far unable to figure out how to change back to the default keyboardHandler after changing to the vim or emacs
 keyboard handler.  The ACE kitchen sink does it so I need to examine that code to discover how it is done.
+
 * Test/adapt for compatibility with Ext JS 5? maybe...
 
