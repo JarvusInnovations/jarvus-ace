@@ -1,30 +1,14 @@
 /*jslint browser: true, undef: true *//*global Ext*/
 Ext.define('Jarvus.ace.field.FontSizeComboBox', {
-    extend: 'Ext.form.field.ComboBox',
+    extend: 'Jarvus.ace.field.AceOptionComboBox',
     xtype: 'jarvus-ace-field-fontsizecombobox',
 
-    requires: [
-        'Jarvus.ace.field.AceOptionField'
-    ],
-
-    mixins: {
-        acefield: 'Jarvus.ace.field.AceOptionField'
-    },
-
     config: {
-        editor: null,
         option: 'fontSize'
     },
 
-    displayField: 'text',
-    valueField: 'value',
-    queryMode: 'local',
-    forceSelection: true,
-    grow: true,
-    growAppend: 'WW',
-
     store: {
-        fields:['value','text'],
+        fields: ['value','text'],
         data: [
             {value: 6,  text: '6px'},
             {value: 7,  text: '7px'},

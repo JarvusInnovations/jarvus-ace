@@ -1,27 +1,11 @@
 /*jslint browser: true, undef: true *//*global Ext*/
 Ext.define('Jarvus.ace.field.ThemeComboBox', {
-    extend: 'Ext.form.field.ComboBox',
+    extend: 'Jarvus.ace.field.AceOptionComboBox',
     xtype: 'jarvus-ace-field-themecombobox',
 
-    requires: [
-        'Jarvus.ace.field.AceOptionField'
-    ],
-
-    mixins: {
-        acefield: 'Jarvus.ace.field.AceOptionField'
-    },
-
     config: {
-        editor: null,
         option: 'theme'
     },
-
-    displayField: 'text',
-    valueField: 'value',
-    queryMode: 'local',
-    forceSelection: true,
-    grow: true,
-    growAppend: 'WW',
 
     store: {
         fields:['value','text'],
@@ -64,6 +48,4 @@ Ext.define('Jarvus.ace.field.ThemeComboBox', {
             {value: 'ace/theme/vibrant_ink',  text: 'Vibrant Ink'}
         ]
     }
-
-
 });
