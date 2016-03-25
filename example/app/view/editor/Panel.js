@@ -31,7 +31,7 @@ Ext.define('JarvusAceDemo.view.editor.Panel', {
                 'blur',
                 'change'
             ],
-            'EditorSession': [
+            'EditSession': [
                 'change'
             ],
             'Selection': [
