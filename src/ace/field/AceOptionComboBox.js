@@ -1,4 +1,7 @@
 /*jslint browser: true, undef: true *//*global Ext*/
+/**
+ *
+ */
 Ext.define('Jarvus.ace.field.AceOptionComboBox', {
     extend: 'Ext.form.field.ComboBox',
 
@@ -21,19 +24,17 @@ Ext.define('Jarvus.ace.field.AceOptionComboBox', {
         growAppend: 'WW'
     },
 
-    addListeners: function(editor) {
-        var me = this;
+    listeners: [{
+        'render' : function(combo) {
+            combo.displayValue(combo.getConfiguration().get(combo.getOption()));
+        },
+        'select' : function(combo,record) {
+            combo.getConfiguration().set(combo.getOption(),record.get('value'));
+        }
+    }],
 
-        me.on('select', function(combo,record) {
-            if (editor) {
-                editor.doOptionChange(me.getOption(),record.get('value'));
-            }
-        });
-    },
-
-    displayCurrentValue: function(editor) {
+    displayValue: function(val) {
         var me = this,
-            val = editor.getOption(me.getOption());
             rec = me.getStore().query('value',val).first();
 
         if (rec) {

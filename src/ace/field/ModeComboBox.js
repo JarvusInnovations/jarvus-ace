@@ -1,4 +1,7 @@
 /*jslint browser: true, undef: true *//*global Ext*/
+/**
+ *
+ */
 Ext.define('Jarvus.ace.field.ModeComboBox', {
     extend: 'Jarvus.ace.field.AceOptionComboBox',
     xtype: 'jarvus-ace-field-modecombobox',

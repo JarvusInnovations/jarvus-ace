@@ -1,4 +1,7 @@
 /*jslint browser: true, undef: true *//*global Ext*/
+/**
+ *
+ */
 Ext.define('Jarvus.ace.field.AceOptionCheckbox', {
     extend: 'Ext.form.field.Checkbox',
 
@@ -14,20 +17,17 @@ Ext.define('Jarvus.ace.field.AceOptionCheckbox', {
         option: null
     },
 
-    addListeners: function(editor) {
-        var me = this;
+    listeners: [{
+        'render' : function(checkbox) {
+            checkbox.displayValue(checkbox.getConfiguration().get(checkbox.getOption()));
+        },
+        'change' : function(checkbox, val) {
+            checkbox.getConfiguration().set(checkbox.getOption(),val);
+        }
+    }],
 
-        me.on('change', function(checkbox, val) {
-            if (editor) {
-                editor.doOptionChange(me.getOption(),val);
-            }
-        });
-    },
-
-    displayCurrentValue: function(editor) {
-        var me = this,
-            val = editor.getOption(me.getOption());
-
-        me.setValue(val);
+    displayValue: function(val) {
+        this.setValue(val);
     }
+
 });
