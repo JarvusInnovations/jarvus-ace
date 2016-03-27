@@ -1,67 +1,20 @@
 /*jslint browser: true, undef: true *//*global Ext,ace*/
+/**
+ *
+ */
 Ext.define('Jarvus.ace.Editor', {
     extend: 'Ext.Component',
     xtype: 'jarvus-ace-editor',
 
-    stateful: true,
-    stateId: 'jarvus-ace-editor',
+    requires: [
+        'Jarvus.ace.util.Configuration'
+    ],
 
     config: {
+        configuration: 'Jarvus.ace.util.Configuration',
         editor: null,
         parentContainer: null,
-
-        options: {
-            animatedScroll: false,
-            autoScrollEditorIntoView: undefined,
-            behavioursEnabled: true,
-            cursorStyle: "ace",
-            displayIndentGuides: true,
-            dragDelay: 0,
-            dragEnabled: true,
-            enableBlockSelect: true,
-            enableMultiselect: true,
-            fadeFoldWidgets: false,
-            firstLineNumber: 1,
-            fixedWidthGutter: undefined,
-            focusTimout: 0,
-            //foldStyle: undefined, //TODO: error: misspelled option "foldStyle"
-            fontFamily: undefined,
-            fontSize: 12,
-            hScrollBarAlwaysVisible: false,
-            highlightActiveLine: true,
-            highlightGutterLine: true,
-            highlightSelectedWord: true,
-            indentedSoftWrap: true,
-            keyboardHandler: undefined,
-            maxLines: undefined,
-            mergeUndoDeltas: true,
-            minLines: undefined,
-            mode: "ace/mode/text",
-            newLineMode: "auto",
-            overwrite: false,
-            printMargin: 80,
-            printMarginColumn: 80,
-            readOnly: false,
-            scrollPastEnd: 0,
-            scrollSpeed: 2,
-            selectionStyle: "line",
-            showFoldWidgets: true,
-            showGutter: true,
-            showInvisibles: false,
-            showLineNumbers: true,
-            showPrintMargin: true,
-            tabSize: 4,
-            theme: undefined,
-            tooltipFollowsMouse: true,
-            useSoftTabs: true,
-            useWorker: true,
-            vScrollBarAlwaysVisible: false,
-            wrap: "off",
-            wrapBehavioursEnabled: true
-        },
-
         subscribe: null
-
     },
 
     initComponent: function() {
@@ -74,12 +27,28 @@ Ext.define('Jarvus.ace.Editor', {
         var me = this;
 
         me.initEditor();
-        me.syncSize();
+        //me.syncSize();
+    },
+
+    applyConfiguration: function(configuration) {
+        var me = this;
+
+        if (typeof configuration == 'string') {
+            Ext.syncRequire(configuration);
+            configuration = Ext.ClassManager.get(configuration);
+        }
+        configuration.on('optionchange', function(config,option,val) {
+            if (me.getEditor()) {
+                me.getEditor().setOption(option,val);
+            }
+        });
+
+        return configuration;
     },
 
     initEditor: function() {
         var me = this,
-            options = me.getOptions(),
+            config = this.getConfiguration(),
             editor;
 
         if (!me.getEditor()) {
@@ -90,51 +59,11 @@ Ext.define('Jarvus.ace.Editor', {
         // TODO: Remove this when its absence no longer causes a warning in future ACE version
         editor.$blockScrolling = 'Infinity',
 
-        me.initSettingsFields();
-        editor.setOptions(options);
-        me.attachEvents();
-    },
+        //me.initSettingsFields();
 
-    doOptionChange: function(option,value) {
-        var me = this,
-            options = me.getOptions();
+        editor.setOptions(config.getOptions());
+        //me.attachEvents();
 
-        options[option] = value;
-        me.setOptions(options);
-
-        me.fireEvent('optionchange');
-    },
-
-    applyOptions: function(options) {
-        return Ext.apply({},options);
-    },
-
-    updateOptions: function() {
-        var me = this,
-            editor = me.getEditor(),
-            options = me.getOptions();
-
-        if (editor) {
-            me.saveState();
-            editor.setOptions(options);
-            me.fireEvent('optionschange');
-        }
-    },
-
-    getOption: function(option) {
-        var options = this.getOptions();
-
-        return options[option];
-    },
-
-    initSettingsFields: function() {
-        var fields = Ext.ComponentQuery.query('field[aceSettingsField]{hasEditorItemId("editor-01")}'),
-            fieldsLen = fields.length,
-            i = 0;
-
-        for (;i<fieldsLen;i++) {
-            fields[i].setEditors(this);
-        }
     },
 
     attachEvents: function() {
@@ -177,27 +106,10 @@ Ext.define('Jarvus.ace.Editor', {
                 me.fireEvent((eventClass+eventName).toLowerCase(),arguments);
             });
         }
-    },
-
-    getState: function() {
-        var me = this;
-
-        return {options: me.getOptions()};
-    },
-
-    applyState: function(state) {
-        var me = this,
-            options = Ext.apply({},me.getOptions());
-
-        if (state) {
-            if (state.options) {
-                Ext.apply(options,state.options);
-                me.setOptions(options);
-            }
-        }
-    },
+    }
 
     // TODO: should this be necessary?  getting no height with fit layout.
+    /*
     syncSize: function() {
         var me = this,
             size = me.getParentContainer().getSize();
@@ -205,5 +117,6 @@ Ext.define('Jarvus.ace.Editor', {
         me.setHeight(size.height);
         me.setWidth(size.width);
     }
+    */
 
 });
