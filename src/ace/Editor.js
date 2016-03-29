@@ -43,8 +43,6 @@ Ext.define('Jarvus.ace.Editor', {
             config = this.getConfiguration(),
             editor;
 
-        console.log(config);
-
         if (!me.getEditor()) {
             me.setEditor(ace.edit(me.el.id));
         }
@@ -53,10 +51,7 @@ Ext.define('Jarvus.ace.Editor', {
         // TODO: Remove this when its absence no longer causes a warning in future ACE version
         editor.$blockScrolling = 'Infinity',
 
-        //me.initSettingsFields();
-
         editor.setOptions(config.getOptions());
-        //me.attachEvents();
 
     },
 
