@@ -13,21 +13,13 @@ Ext.define('Jarvus.ace.Editor', {
     config: {
         configuration: 'Jarvus.ace.util.Configuration',
         editor: null,
-        parentContainer: null,
         subscribe: null
-    },
-
-    initComponent: function() {
-        var me = this;
-
-        me.setParentContainer(me.up('container'));
     },
 
     afterRender: function() {
         var me = this;
 
         me.initEditor();
-        //me.syncSize();
     },
 
     applyConfiguration: function(configuration) {
@@ -50,6 +42,8 @@ Ext.define('Jarvus.ace.Editor', {
         var me = this,
             config = this.getConfiguration(),
             editor;
+
+        console.log(config);
 
         if (!me.getEditor()) {
             me.setEditor(ace.edit(me.el.id));
@@ -112,7 +106,7 @@ Ext.define('Jarvus.ace.Editor', {
     /*
     syncSize: function() {
         var me = this,
-            size = me.getParentContainer().getSize();
+            size = me.up('container').getSize();
 
         me.setHeight(size.height);
         me.setWidth(size.width);
