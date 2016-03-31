@@ -12,16 +12,6 @@ Ext.define('JarvusAceDemo.view.editor.Panel', {
     items: [{
         xtype: 'jarvus-ace-editor',
 
-        // Ace configuration
-        options: {
-            theme: 'ace/theme/monokai',
-            mode: 'ace/mode/javascript',
-            keyboardHandler: 'ace/keyboard/vim',
-            showPrintMargin: true,
-            printMarginColumn: 20,
-            fontSize: 24
-        },
-
         // subcribe to ACE events
         subscribe: {
             'Document': [
