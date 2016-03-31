@@ -10,28 +10,39 @@ An ExtJS 6 classic wrapper for the ACE editor
 The jarvus-ace component allows you to configure Ace options and subscribe to Ace events
 
 ### Ace Options
-The jarvus-ace component has an "options" configuration parameter that allows for the configuration of available
-ACE options when the component is extended or created inline. To see a full list of available options and their
-defaults, see the options object in the config attribute of Jarvus.ace.Editor located at src/ace/Editor.js
+The jarvus-ace component uses a singleton configuration class to set the editor's default options.  To see
+a full list of available options and their defaults, see the options object in the config attribute of
+Jarvus.ace.util.AbstractConfiguration located at src/ace/util.AbstractConfiguration.js.  To alter the
+default option values, you can create an override of this class and require it in your Application.
 
 Example:
 ```
-    // Ace configuration
-    options: {
-        theme: 'ace/theme/monokai',
-        mode: 'ace/mode/javascript',
-        keyboardHandler: 'ace/keyboard/vim',
-        showPrintMargin: true,
-        printMarginColumn: 20,
-        fontSize: 24
-    },
-```
+/*
+ * app/AceConfiguration.js
+ */
+Ext.define('MyApplication.AceConfiguration', {
+    override: 'Jarvus.ace.util.AbstractConfiguration',
 
-To set options after component instantiation, use the ``doOptionChange(option, value)`` method of Jarvus.ace.Editor.
+    config: {
+        options: {
+            theme: 'ace/theme/monokai',
+            mode: 'ace/mode/javascript',
+            keyboardHandler: 'ace/keyboard/vim',
+            fontSize: 24
+        }
+    }
+});
+```
+The editor configuration is stateful and the most recent editor option configuration will take precedence over
+the default values.  If you do not wish for the editor state to be restored over the default options, set
+``stateful: false`` in your custom configuration class.
+
+To set options after component instantiation, use the ``setOption(option, value)`` method of
+Jarvus.ace.util.AbstractConfiguration.
 
 Example:
 ```
-   myJarvusAceInstance.doOptionChange('fontSize', 16);
+   myJarvusAceInstance.getConfiguration().setOption('fontSize',16);
 ```
 
 ### Ace Events
@@ -62,15 +73,8 @@ component as ``editsessionchange``
 
 ### Form components for Ace Options
 There are form components in the src/ace/field directory that can be included in an application for run time
-modification of common ACE options.  These are simple extensions of Ext JS field classes with a mixin that handles
-interaction with the ACE editor.  You may require and instantiate these classes in your application, or use them as
-templates if you wish to create a form component for an ACE option that is not handled by the existing form component
-classes.
-
-### Demo application
-There is a simple demo application in the example directory.  The class defined in the example/app/view/editor/Panel.js
-file shows the inline creation of the jarvus-ace component.  The jarvus-ace component can also be extended to create a
-custom component.
+modification of common ACE options.  These are simple extensions of two base field classes: Jarvus.ace.field.AceOptionCheckbox
+for options with boolean values and Jarvus.ace.field.AceOptionComboBox for options with a number of possible options.
 
 ## To do and known issues
 
@@ -79,9 +83,6 @@ for adjusting ACE options in the src/ace/field directory will only work with the
 errors if your application uses the modern toolkit.  A solution to this issue may be to move these field components to
 their own repo with framework and toolkit specific branches.  For now, if you wish to use the jarvus-ace component with
 the modern toolkit, delete the files in the src/ace/field directory and you should be able to build successfully.
-
-* I am so far unable to figure out how to change back to the default keyboardHandler after changing to the vim or emacs
-keyboard handler.  The ACE kitchen sink does it so I need to examine that code to discover how it is done.
 
 * Test/adapt for compatibility with Ext JS 5? maybe...
 
