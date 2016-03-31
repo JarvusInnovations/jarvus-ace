@@ -16,6 +16,7 @@ Ext.define('Jarvus.ace.Editor', {
         var me = this;
 
         me.initEditor();
+        me.attachEvents();
     },
 
     applyConfiguration: function(configuration) {
@@ -51,9 +52,8 @@ Ext.define('Jarvus.ace.Editor', {
 
         editor.setOptions(config.getOptions());
 
-    }
+    },
 
-/*
     attachEvents: function() {
         var me = this,
             subscribe = me.getSubscribe();
@@ -94,10 +94,7 @@ Ext.define('Jarvus.ace.Editor', {
                 me.fireEvent((eventClass+eventName).toLowerCase(),arguments);
             });
         }
-    },
-*/
-
-
+    }
 
     // TODO: should this be necessary?  getting no height with fit layout.
     /*
