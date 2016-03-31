@@ -10,16 +10,12 @@ Ext.define('Jarvus.ace.field.AceOptionFieldBase', {
     },
 
     /**
-     * @cfg {String} aceSettingsField Identifies this component as an aceSettingsField
-     * @cfg {String[]} editorItemIds an array of itemIDs of editors using this component
-     * @cfg {Javus.ace.Editor[]} editors an array of editors using this component
+     * @cfg {String} option the name of the configuration option corresponding to this field
+     * @cfg {Jarvus.ace.util.AbstractConfiguration} configuration this component's configuration class
      */
     config: {
         option: null,
-        configuration: 'Jarvus.ace.util.Configuration',
-        aceSettingsField: true,
-        editorItemId: [],
-        editors: []
+        configuration: 'Jarvus.ace.util.Configuration'
     },
 
     applyConfiguration: function(configuration) {
@@ -29,6 +25,7 @@ Ext.define('Jarvus.ace.field.AceOptionFieldBase', {
             Ext.syncRequire(configuration);
             configuration = Ext.ClassManager.get(configuration);
         }
+
         configuration.on('optionchange', function(config,option,val) {
             if (me.getOption() == option) {
                 me.displayValue(val);
@@ -39,7 +36,7 @@ Ext.define('Jarvus.ace.field.AceOptionFieldBase', {
     },
 
     displayValue: function() {
-        console.warn('this should be implemented in classes that use mixin');
+        console.warn('displayValue() should be implemented in classes that use this mixin');
     }
 
 });

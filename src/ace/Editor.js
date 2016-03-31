@@ -6,10 +6,6 @@ Ext.define('Jarvus.ace.Editor', {
     extend: 'Ext.Component',
     xtype: 'jarvus-ace-editor',
 
-    requires: [
-        'Jarvus.ace.util.Configuration'
-    ],
-
     config: {
         configuration: 'Jarvus.ace.util.Configuration',
         editor: null,
@@ -25,10 +21,12 @@ Ext.define('Jarvus.ace.Editor', {
     applyConfiguration: function(configuration) {
         var me = this;
 
+        // Require and get reference to singleton configuration class.
         if (typeof configuration == 'string') {
             Ext.syncRequire(configuration);
             configuration = Ext.ClassManager.get(configuration);
         }
+        // listen for configuration changes and update editor options
         configuration.on('optionchange', function(config,option,val) {
             if (me.getEditor()) {
                 me.getEditor().setOption(option,val);
@@ -49,12 +47,13 @@ Ext.define('Jarvus.ace.Editor', {
         editor = me.getEditor();
 
         // TODO: Remove this when its absence no longer causes a warning in future ACE version
-        editor.$blockScrolling = 'Infinity',
+        editor.$blockScrolling = 'Infinity';
 
         editor.setOptions(config.getOptions());
 
-    },
+    }
 
+/*
     attachEvents: function() {
         var me = this,
             subscribe = me.getSubscribe();
@@ -95,7 +94,10 @@ Ext.define('Jarvus.ace.Editor', {
                 me.fireEvent((eventClass+eventName).toLowerCase(),arguments);
             });
         }
-    }
+    },
+*/
+
+
 
     // TODO: should this be necessary?  getting no height with fit layout.
     /*

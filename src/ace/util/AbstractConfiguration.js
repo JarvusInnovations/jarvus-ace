@@ -9,21 +9,21 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
         'Ext.state.Stateful'
     ],
 
+    stateful: true,
+    stateId: 'jarvus-ace-editor',
+    stateEvents: ['optionchange'],
+
     constructor: function (config) {
         var me = this;
 
         me.mixins.observable.constructor.call(me, config);
-        me.mixins.state.constructor.call(me);
+        me.mixins.state.constructor.call(me, config);
     },
 
-    stateful: true,
-    stateId: 'jarvus-ace-editor',
-    stateEvents: ['optionchanged'],
-
-    addStateEvents: function(){},
+    // stateful apparently calls this function without checking if it exists
+    getPlugins: function() { return []; },
 
     config: {
-    plugins: [],
         options: {
             animatedScroll: false,
             autoScrollEditorIntoView: undefined,
@@ -75,44 +75,31 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
         }
     },
 
-    get: function(key) {
+    getOption: function(key) {
         var options = this.getOptions();
 
         return options ? options[key] : null;
     },
 
-    set: function(key, val) {
+    setOption: function(key, val) {
         var me = this,
             options = this.getOptions();
 
         if (options) {
             options[key] = val;
         }
-    //    me.saveState();
         me.fireEvent('optionchange',me,key,val);
     },
 
-
     //@private
     getState: function() {
-        console.log('saving state....');
-        var me = this;
-
-        return {options: me.getOptions()};
+        return {options: this.getOptions()};
     },
 
     //@private
     applyState: function(state) {
-        console.log('********* Apply State *********');
-        console.log(state);
-        var me = this,
-            options = Ext.apply({},me.getOptions());
-
-        if (state) {
-            if (state.options) {
-                Ext.apply(options,state.options);
-                me.setOptions(options);
-            }
+        if (state && state.options) {
+            Ext.apply(this.setOptions(state.options));
         }
     }
 

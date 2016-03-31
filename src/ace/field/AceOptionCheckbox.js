@@ -19,10 +19,10 @@ Ext.define('Jarvus.ace.field.AceOptionCheckbox', {
 
     listeners: [{
         'render' : function(checkbox) {
-            checkbox.displayValue(checkbox.getConfiguration().get(checkbox.getOption()));
+            checkbox.displayValue(checkbox.getConfiguration().getOption(checkbox.getOption()));
         },
         'change' : function(checkbox, val) {
-            checkbox.getConfiguration().set(checkbox.getOption(),val);
+            checkbox.getConfiguration().setOption(checkbox.getOption(),val);
         }
     }],
 

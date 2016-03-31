@@ -26,10 +26,10 @@ Ext.define('Jarvus.ace.field.AceOptionComboBox', {
 
     listeners: [{
         'render' : function(combo) {
-            combo.displayValue(combo.getConfiguration().get(combo.getOption()));
+            combo.displayValue(combo.getConfiguration().getOption(combo.getOption()));
         },
         'select' : function(combo,record) {
-            combo.getConfiguration().set(combo.getOption(),record.get('value'));
+            combo.getConfiguration().setOption(combo.getOption(),record.get('value'));
         }
     }],
 
