@@ -10,11 +10,13 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
     ],
 
     stateful: true,
-    stateId: 'jarvus-ace-editor',
+    stateId: '',
     stateEvents: ['optionchange'],
 
     constructor: function (config) {
         var me = this;
+
+        me.stateId = me.self.getName().toLowerCase().replace(/\./g,'-');
 
         me.mixins.observable.constructor.call(me, config);
         me.mixins.state.constructor.call(me, config);
