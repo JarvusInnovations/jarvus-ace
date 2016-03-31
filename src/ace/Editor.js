@@ -50,7 +50,7 @@ Ext.define('Jarvus.ace.Editor', {
         // TODO: Remove this when its absence no longer causes a warning in future ACE version
         editor.$blockScrolling = 'Infinity';
 
-        editor.setOptions(config.getOptions());
+        editor.setOptions(Ext.apply({},config.getOptions()));
 
     },
 
