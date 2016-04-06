@@ -52,7 +52,6 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
             maxLines: undefined,
             mergeUndoDeltas: true,
             minLines: undefined,
-            mode: "ace/mode/text",
             newLineMode: "auto",
             overwrite: false,
             printMargin: 80,
@@ -95,7 +94,13 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
 
     //@private
     getState: function() {
-        return {options: this.getOptions()};
+        var options = this.getOptions();
+
+        if (options.mode) {
+            delete(options.mode);
+        }
+
+        return {options: options};
     },
 
     //@private
