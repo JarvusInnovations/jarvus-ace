@@ -1,4 +1,4 @@
-/*jslint browser: true, undef: true *//*global Ext,ace*/
+/*jslint browser: true, undef: true *//*global Ext*/
 /**
  *
  */
@@ -8,14 +8,14 @@ Ext.define('Jarvus.ace.Editor', {
 
     config: {
         configuration: 'Jarvus.ace.util.Configuration',
-        editor: null,
+        ace: null,
         subscribe: null
     },
 
     afterRender: function() {
         var me = this;
 
-        me.initEditor();
+        me.initAce();
         me.attachEvents();
     },
 
@@ -27,25 +27,25 @@ Ext.define('Jarvus.ace.Editor', {
             Ext.syncRequire(configuration);
             configuration = Ext.ClassManager.get(configuration);
         }
-        // listen for configuration changes and update editor options
+        // listen for configuration changes and update ace editor options
         configuration.on('optionchange', function(config,option,val) {
-            if (me.getEditor()) {
-                me.getEditor().setOption(option,val);
+            if (me.getAce()) {
+                me.getAce().setOption(option,val);
             }
         });
 
         return configuration;
     },
 
-    initEditor: function() {
+    initAce: function() {
         var me = this,
             config = this.getConfiguration(),
             editor;
 
-        if (!me.getEditor()) {
-            me.setEditor(ace.edit(me.el.id));
+        if (!me.getAce()) {
+            me.setAce(ace.edit(me.el.id));
         }
-        editor = me.getEditor();
+        editor = me.getAce();
 
         // TODO: Remove this when its absence no longer causes a warning in future ACE version
         editor.$blockScrolling = 'Infinity';
@@ -73,16 +73,16 @@ Ext.define('Jarvus.ace.Editor', {
 
         switch (eventClass) {
             case 'Document':
-                aceClass = me.getEditor().getSession().getDocument();
+                aceClass = me.getAce().getSession().getDocument();
                 break;
             case 'Editor':
-                aceClass = me.getEditor();
+                aceClass = me.getAce();
                 break;
             case 'EditorSession':
-                aceClass = me.getEditor().getSession();
+                aceClass = me.getAce().getSession();
                 break;
             case 'Selection':
-                aceClass = me.getEditor().getSession().getSelection();
+                aceClass = me.getAce().getSession().getSelection();
                 break;
             default:
                 console.warn(eventClass+' is not a recognized Ace Editor class');
