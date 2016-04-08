@@ -58,7 +58,7 @@ Example:
             'blur',
             'change'
         ],
-        'EditSession': [
+        'EditorSession': [
             'change'
         ],
         'Document': [
