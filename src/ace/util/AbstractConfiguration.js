@@ -99,10 +99,6 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
     getState: function() {
         var options = this.getOptions();
 
-        if (options.mode) {
-            delete(options.mode);
-        }
-
         return {options: options};
     },
 
