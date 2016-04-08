@@ -50,6 +50,16 @@ Ext.define('Jarvus.ace.Editor', {
         // TODO: Remove this when its absence no longer causes a warning in future ACE version
         editor.$blockScrolling = 'Infinity';
 
+        // TODO: This could fix VIM :w save issue. needs testing, put in right place
+        /*
+        ace.config.loadModule("ace/keyboard/vim", function(m) {
+            var VimApi = require("ace/keyboard/vim").CodeMirror.Vim
+            VimApi.defineEx("write", "w", function(cm, input) {
+                cm.ace.execCommand("save")
+            })
+        })
+        */
+
         editor.setOptions(Ext.apply({},config.getOptions()));
 
     },
