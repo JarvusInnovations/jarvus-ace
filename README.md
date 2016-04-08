@@ -69,7 +69,7 @@ Example:
 
 Subscribed events will be fired by the jarvus-ace component with the ACE class name and event name concatenated in
 lower case.  So, if you subscribe to the change event in the Ace EditSession class, it will be fired by the jarvus-ace
-component as ``editsessionchange``
+component as ``editorsessionchange``
 
 ### Form components for Ace Options
 There are form components in the src/ace/field directory that can be included in an application for run time
