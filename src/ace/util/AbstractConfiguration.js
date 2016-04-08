@@ -27,6 +27,8 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
 
     config: {
         options: {
+        // options below are available, shown with their default values
+        /*
             animatedScroll: false,
             autoScrollEditorIntoView: undefined,
             behavioursEnabled: true,
@@ -73,6 +75,7 @@ Ext.define('Jarvus.ace.util.AbstractConfiguration', {
             vScrollBarAlwaysVisible: false,
             wrap: "off",
             wrapBehavioursEnabled: true
+        */
         }
     },
 
