@@ -101,7 +101,7 @@ Ext.define('Jarvus.ace.Editor', {
         if (aceClass) {
             aceClass.on(eventName, function() {
                 //console.log((eventClass+eventName).toLowerCase());
-                me.fireEvent((eventClass+eventName).toLowerCase(),arguments);
+                me.fireEvent((eventClass+eventName).toLowerCase(),me,arguments);
             });
         }
     }
