@@ -12,6 +12,20 @@ Ext.define('Jarvus.ace.Editor', {
         subscribe: null
     },
 
+    /**
+     * Modern toolkit does not have the "afterRender" method that exists in the classic toolkit so on initialize
+     * a listener is added for the first firing of the painted event which calls afterRender
+     */
+    initialize: function() {
+        var me = this;
+
+        me.on('painted', function() {
+            me.afterRender();
+            // painted isn't listenable in the controller, this will fire it once
+            me.fireEvent('painted', me);
+        }, me, {single: true});
+    },
+
     afterRender: function() {
         var me = this;
 
@@ -52,12 +66,12 @@ Ext.define('Jarvus.ace.Editor', {
 
         // TODO: This could fix VIM :w save issue. needs testing, put in right place
         /*
-        ace.config.loadModule("ace/keyboard/vim", function(m) {
-            var VimApi = require("ace/keyboard/vim").CodeMirror.Vim
-            VimApi.defineEx("write", "w", function(cm, input) {
-                cm.ace.execCommand("save")
-            })
-        })
+        ace.config.loadModule("ace/keyboard/vim", function() {
+            var VimApi = require("ace/keyboard/vim").CodeMirror.Vim;
+            VimApi.defineEx("write", "w", function(cm) {
+                cm.ace.execCommand("save");
+            });
+        });
         */
 
         editor.setOptions(Ext.apply({},config.getOptions()));
