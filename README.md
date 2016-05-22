@@ -33,9 +33,9 @@ Ext.define('MyApplication.AceConfiguration', {
     }
 });
 ```
-The editor configuration is stateful and the most recent editor option configuration will take precedence over
-the default values.  If you do not wish for the editor state to be restored over the default options, set
-``stateful: false`` in your custom configuration class.
+The editor configuration is stateful when using the Ext JS 6 Classic toolit and the most recent editor option
+configuration will take precedence over the default values.  If you do not wish for the editor state to be
+restored over the default options, set ``stateful: false`` in your custom configuration class.
 
 To set options after component instantiation, use the ``setOption(option, value)`` method of
 Jarvus.ace.util.AbstractConfiguration.
