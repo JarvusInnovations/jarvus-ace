@@ -73,6 +73,7 @@ component as ``editorsessionchange``
 
 ### Form components for Ace Options
 There are form components in the src/ace/field directory that can be included in an application for run time
-modification of common ACE options.  These are simple extensions of two base field classes: Jarvus.ace.field.AceOptionCheckbox
-for options with boolean values and Jarvus.ace.field.AceOptionComboBox for options with a number of possible options.
+modification of common ACE options.  You will find these components in the directory corresponding to the toolkit
+you are using (classic or modern).  You can use the components as is, or use them as models for your own component
+classes.
 
