@@ -33,6 +33,7 @@ Ext.define('Jarvus.ace.field.ThemeSelect', {
         {value: 'ace/theme/clouds_midnight',  text: 'Clouds Midnight'},
         {value: 'ace/theme/cobalt',  text: 'Cobalt'},
         {value: 'ace/theme/idle_fingers',  text: 'idle Fingers'},
+        {value: 'ace/theme/iceberg',  text: 'Iceberg'},
         {value: 'ace/theme/kr_theme',  text: 'krTheme'},
         {value: 'ace/theme/merbivore',  text: 'Merbivore'},
         {value: 'ace/theme/merbivore_soft',  text: 'Merbivore Soft'},
