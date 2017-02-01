@@ -104,7 +104,8 @@ color: #87afaf\
 color: #969896\
 }\
 .ace-iceberg .ace_indent-guide {\
-border-right: 1px dotted #112\
+border-right: 1px dotted #112;\
+background: none\
 }";
 
 var dom = require("../lib/dom");
