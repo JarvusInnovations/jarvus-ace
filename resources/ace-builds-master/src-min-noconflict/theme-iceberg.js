@@ -4,14 +4,15 @@ exports.isDark = true;
 exports.cssClass = "ace-iceberg";
 exports.cssText = ".ace-iceberg .ace_gutter {\
 background: #121314;\
-color: #adafb2\
+color: #333333\
 }\
 .ace-iceberg .ace_print-margin {\
 width: 1px;\
 background: #112\
 }\
 .ace-iceberg {\
-background-color: #000;\
+background-color: #121314;\
+font-family:'Source Code Pro',Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New;\
 color: #C5C8C6\
 }\
 .ace-iceberg .ace_cursor {\
