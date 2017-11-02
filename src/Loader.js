@@ -45,7 +45,7 @@ Ext.define('Jarvus.ace.Loader', {
             disableCaching = me.getDisableCaching(),
             previousDisableCaching,
             modulesLoaded,
-            onModuleLoaded = function onModuleLoaded(options) {
+            onModuleLoaded = function (options) {
                 modulesLoaded.push(options.url);
 
                 if (modulesLoaded.length == modulesLength) {
@@ -56,6 +56,9 @@ Ext.define('Jarvus.ace.Loader', {
                     me.ready = true;
                     me.fireEvent('aceready', window.ace);
                 }
+            },
+            onModuleError = function (options) {
+                Ext.Logger.error('Failed to load ace module: '+options.url);
             };
 
         if (me.ready || me.modulesLoaded) {
@@ -77,12 +80,13 @@ Ext.define('Jarvus.ace.Loader', {
                 for (; moduleIndex < modulesLength; moduleIndex++) {
                     Ext.Loader.loadScript({
                         url: Ext.resolveResource('<@jarvus-ace>ace/'+modules[moduleIndex]),
-                        onLoad: onModuleLoaded
+                        onLoad: onModuleLoaded,
+                        onError: onModuleError
                     });
                 }
             },
             onError: function() {
-                debugger;
+                Ext.Logger.error('Failed to load ace');
             }
         });
     },
