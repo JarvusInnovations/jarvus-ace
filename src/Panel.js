@@ -65,6 +65,19 @@ Ext.define('Jarvus.ace.Panel', {
         });
     },
 
+    onReady: function(onReady, scope) {
+        var me = this,
+            aceEditor = me.aceEditor;
+
+        scope = scope || me;
+
+        if (aceEditor) {
+            onReady.call(scope, me, aceEditor, aceEditor.getSession());
+        } else {
+            me.on('editorready', onReady, scope, { single: true });
+        }
+    },
+
     onEditorChange: function() {
         console.log('onEditorChange', arguments);
     },
