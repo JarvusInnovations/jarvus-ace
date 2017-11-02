@@ -15,7 +15,9 @@ Ext.define('Jarvus.ace.Panel', {
         theme: 'ace/theme/monokai',
         tabSize: 4,
         softTabs: true,
-        showPrintMargin: false
+        showPrintMargin: false,
+        showInvisibles: true,
+        displayIndentGuides: true
     },
 
     statics: {
@@ -43,6 +45,8 @@ Ext.define('Jarvus.ace.Panel', {
             // configure editor
             aceEditor.setTheme(me.getTheme());
             aceEditor.setShowPrintMargin(me.getShowPrintMargin());
+            aceEditor.setShowInvisibles(me.getShowInvisibles());
+            aceEditor.setDisplayIndentGuides(me.getDisplayIndentGuides());
             aceSession.setTabSize(me.getTabSize());
             aceSession.setUseSoftTabs(me.getSoftTabs());
 
