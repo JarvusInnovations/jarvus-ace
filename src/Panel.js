@@ -8,8 +8,8 @@ Ext.define('Jarvus.ace.Panel', {
 
 
     config: {
-        openPath: null,
-        openLine: null,
+        path: null,
+        line: null,
 
         theme: 'ace/theme/monokai',
         tabSize: 4,
@@ -42,26 +42,28 @@ Ext.define('Jarvus.ace.Panel', {
         me.callParent(arguments);
 
         Jarvus.ace.Loader.onReady(function(ace) {
-            var editor = ace.edit(me.getTargetEl().dom),
-                session = editor.getSession();
+            var aceEditor = ace.edit(me.getTargetEl().dom),
+                aceSession = aceEditor.getSession();
+
+            me.aceEditor = aceEditor;
 
             // configure editor
-            editor.setTheme(me.getTheme());
-            editor.setShowPrintMargin(me.getShowPrintMargin());
-            session.setTabSize(me.getTabSize());
-            session.setUseSoftTabs(me.getSoftTabs());
+            aceEditor.setTheme(me.getTheme());
+            aceEditor.setShowPrintMargin(me.getShowPrintMargin());
+            aceSession.setTabSize(me.getTabSize());
+            aceSession.setUseSoftTabs(me.getSoftTabs());
 
             // listen for changes to mark dirty
-            session.on('change', Ext.bind(me.onEditorChange, me));
+            aceSession.on('change', Ext.bind(me.onEditorChange, me));
 
             // listen for undos to validate dirty state
-            Ext.Function.interceptAfter(session.getUndoManager(), 'undo', Ext.bind(session.onEditorUndo, session));
+            Ext.Function.interceptAfter(aceSession.getUndoManager(), 'undo', Ext.bind(me.onEditorUndo, me));
 
             // disable built in find dialog
-            editor.commands.removeCommand('find');
+            aceEditor.commands.removeCommand('find');
 
             // fire editorready event
-            me.fireEvent('editorready', me, editor, session);
+            me.fireEvent('editorready', me, aceEditor, aceSession);
         });
     },
 
