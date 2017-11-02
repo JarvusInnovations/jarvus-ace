@@ -11,30 +11,23 @@ Ext.define('Jarvus.ace.Panel', {
         path: null,
         line: null,
 
+        mode: null,
         theme: 'ace/theme/monokai',
         tabSize: 4,
         softTabs: true,
         showPrintMargin: false
     },
 
-    // initComponent: function() {
+    statics: {
+        extensionModes: {
+            tpl: 'smarty'
+        },
+        modeIcons: {
+            _default: 'file-code-o',
+            text: 'file-text-o',
+        }
+    },
 
-    //     this.itemId = this.itemId;
-
-    //     this.isRevision = false;
-
-    //     if (this.revisionID) {
-    //         this.isRevision = true;
-    //         this.itemId = 'revision:[' + this.revisionID + ']/'+this.path;
-    //     } else {
-    //         this.itemId = '/' + this.path;
-
-    //     }
-
-    //     this.tabConfig = { icon: this.getIcon() };
-
-    //     this.callParent(arguments);
-    // },
 
     afterRender: function() {
         var me = this;
@@ -64,6 +57,49 @@ Ext.define('Jarvus.ace.Panel', {
 
             // fire editorready event
             me.fireEvent('editorready', me, aceEditor, aceSession);
+        });
+    },
+
+    updatePath: function(path) {
+        var me = this;
+
+        me.setTitle(path ? path.substr(path.lastIndexOf('/') + 1) : me.getInitialConfig('title'));
+
+        Jarvus.ace.Loader.onReady(function(ace) {
+            var aceModelist = ace.require('ace/ext/modelist'),
+                mode;
+
+            mode = aceModelist.modesByName[me.self.extensionModes[path.substr(path.lastIndexOf('.')+1)]];
+
+            if (!mode) {
+                mode = aceModelist.getModeForPath(path);
+            }
+
+            if (mode) {
+                me.setMode(mode);
+            }
+        });
+    },
+
+    updateMode: function(mode) {
+        var me = this,
+            modeIcons = me.self.modeIcons,
+            iconCls = modeIcons[mode.name] || modeIcons._default;
+
+        if (iconCls) {
+            iconCls = 'x-fa fa-'+iconCls;
+        }
+
+        if (me.tab) {
+            me.tab.setIconCls(iconCls);
+        } else {
+            me.tabConfig = {
+                iconCls: iconCls
+            };
+        }
+
+        me.onReady(function (editor, aceEditor, aceSession) {
+            aceSession.setMode(mode.mode);
         });
     },
 

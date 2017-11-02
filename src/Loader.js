@@ -6,6 +6,7 @@ Ext.define('Jarvus.ace.Loader', {
         autoLoad: true,
         disableCaching: false,
         modules: [
+            'ext-modelist',
             'mode-html.js',
             'mode-php.js',
             'mode-javascript.js',
