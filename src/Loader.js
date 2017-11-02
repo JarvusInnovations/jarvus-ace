@@ -53,7 +53,7 @@ Ext.define('Jarvus.ace.Loader', {
                     }
 
                     me.ready = true;
-                    me.fireEvent('ready', window.ace);
+                    me.fireEvent('aceready', window.ace);
                 }
             };
 
@@ -86,13 +86,15 @@ Ext.define('Jarvus.ace.Loader', {
         });
     },
 
-    onReady: function(onReady) {
+    onReady: function(onReady, scope) {
         var me = this;
 
+        scope = scope || me;
+
         if (me.ready) {
-            onReady.call(me, window.ace);
+            onReady.call(scope, window.ace);
         } else {
-            me.on('ready', onReady, me, { single: true });
+            me.on('aceready', onReady, scope, { single: true });
         }
     }
 });
