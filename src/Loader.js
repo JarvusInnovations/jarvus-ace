@@ -1,6 +1,9 @@
 Ext.define('Jarvus.ace.Loader', {
     singleton: true,
-    mixins: ['Ext.mixin.Observable'],
+    mixins: [
+        'Ext.mixin.Observable',
+        'Ext.Promise'
+    ],
 
     config: {
         autoLoad: true,
@@ -45,9 +48,11 @@ Ext.define('Jarvus.ace.Loader', {
             disableCaching = me.getDisableCaching(),
             previousDisableCaching;
 
-        if (me.ready || me.modulesLoaded) {
+        if (me.ready || me.loading) {
             return;
         }
+
+        me.loading = true;
 
         if (disableCaching !== null) {
             previousDisableCaching = Ext.Loader.getConfig('disableCaching');
@@ -67,6 +72,7 @@ Ext.define('Jarvus.ace.Loader', {
                         }
 
                         me.ready = true;
+                        me.loading = false;
                         me.fireEvent('aceready', window.ace);
                     }
                 });
@@ -86,6 +92,77 @@ Ext.define('Jarvus.ace.Loader', {
             Ext.callback(onReady, scope, [window.ace]);
         } else {
             me.on('aceready', onReady, scope, { single: true });
+
+            if (!me.loading) {
+                me.load();
+            }
         }
-    }
+    },
+
+    getAce: function() {
+        var me = this;
+
+        return new Ext.Promise(function(resolve) {
+            me.withAce(resolve);
+        });
+    },
+
+    loadDiff: function() {
+        var me = this,
+            disableCaching = me.getDisableCaching(),
+            previousDisableCaching;
+
+        if (me.diffReady || me.diffLoading) {
+            return;
+        }
+
+        me.diffLoading = true;
+
+        if (disableCaching !== null) {
+            previousDisableCaching = Ext.Loader.getConfig('disableCaching');
+            Ext.Loader.setConfig('disableCaching', disableCaching);
+        }
+
+        Ext.Loader.loadScript({
+            url: [
+                Ext.resolveResource('<@jarvus-ace>diff_match_patch.js'),
+                Ext.resolveResource('<@jarvus-ace>ace-diff.js')
+            ],
+            onLoad: function() {
+                if (disableCaching !== null) {
+                    Ext.Loader.setConfig('disableCaching', previousDisableCaching);
+                }
+
+                me.diffReady = true;
+                me.diffLoading = false;
+                me.fireEvent('diffready', window.AceDiff);
+            }
+        });
+    },
+
+    withDiff: function(onReady, scope) {
+        var me = this;
+
+        scope = scope || me;
+
+        me.withAce(function() {
+            if (me.diffReady) {
+                Ext.callback(onReady, scope, [window.AceDiff]);
+            } else {
+                me.on('diffready', onReady, scope, { single: true });
+
+                if (!me.diffLoading) {
+                    me.loadDiff();
+                }
+            }
+        });
+    },
+
+    getDiff: function() {
+        var me = this;
+
+        return new Ext.Promise(function(resolve) {
+            me.withDiff(resolve);
+        });
+    },
 });
