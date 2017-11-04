@@ -115,8 +115,8 @@ Ext.define('Jarvus.ace.Panel', {
 
         me.fireEvent('input', me, aceEditor, aceSession);
 
-        if (me.isDirty != !isClean) {
-            me.isDirty = !isClean;
+        if (me.dirty != !isClean) {
+            me.dirty = !isClean;
             me.fireEvent('dirtychange', me, !isClean, aceEditor, aceSession);
         }
     },
@@ -141,10 +141,14 @@ Ext.define('Jarvus.ace.Panel', {
 
         me.withEditor(function(acePanel, aceEditor, aceSession) {
             aceSession.setValue(content);
-            me.isDirty = false;
+            me.dirty = false;
             Ext.callback(callback, scope || me);
         })
     },
+
+    isDirty: function() {
+        return this.dirty;
+    }
 
     // setSplit: function(value) {
     //     var sp = this.split;
