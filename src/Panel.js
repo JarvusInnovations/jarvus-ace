@@ -156,6 +156,17 @@ Ext.define('Jarvus.ace.Panel', {
 
     isDirty: function() {
         return this.dirty;
+    },
+
+    markClean: function(callback, scope) {
+        var me = this;
+
+        me.withEditor(function(acePanel, aceEditor, aceSession) {
+            aceSession.getUndoManager().markClean();
+            me.dirty = false;
+            me.fireEvent('dirtychange', me, false, aceEditor, aceSession);
+            Ext.callback(callback, scope || me);
+        });
     }
 
     // setSplit: function(value) {
