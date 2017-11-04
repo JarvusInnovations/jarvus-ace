@@ -9,7 +9,7 @@
 }(this, function() {
   'use strict';
 
-  var Range = require('ace/range').Range;
+  var Range = ace.require('ace/range').Range;
 
   var C = {
     DIFF_EQUAL: 0,
