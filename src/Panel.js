@@ -143,7 +143,15 @@ Ext.define('Jarvus.ace.Panel', {
             aceSession.setValue(content);
             me.dirty = false;
             Ext.callback(callback, scope || me);
-        })
+        });
+    },
+
+    withContent: function(callback, scope) {
+        var me = this;
+
+        me.withEditor(function(acePanel, aceEditor, aceSession) {
+            Ext.callback(callback, scope || me, [aceSession.getValue()]);
+        });
     },
 
     isDirty: function() {
