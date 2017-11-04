@@ -31,6 +31,7 @@ Ext.define('Jarvus.ace.Panel', {
     },
 
 
+    // lifecycle methods
     afterRender: function() {
         var me = this;
 
@@ -51,10 +52,7 @@ Ext.define('Jarvus.ace.Panel', {
             aceSession.setUseSoftTabs(me.getSoftTabs());
 
             // listen for changes to mark dirty
-            aceSession.on('change', Ext.bind(me.onEditorChange, me));
-
-            // listen for undos to validate dirty state
-            Ext.Function.interceptAfter(aceSession.getUndoManager(), 'undo', Ext.bind(me.onEditorUndo, me));
+            aceEditor.on('input', Ext.bind(me.onEditorInput, me));
 
             // disable built in find dialog
             aceEditor.commands.removeCommand('find');
@@ -64,6 +62,8 @@ Ext.define('Jarvus.ace.Panel', {
         });
     },
 
+
+    // config handlers
     updatePath: function(path) {
         var me = this;
 
@@ -102,11 +102,29 @@ Ext.define('Jarvus.ace.Panel', {
             };
         }
 
-        me.withEditor(function (editor, aceEditor, aceSession) {
+        me.withEditor(function (acePanel, aceEditor, aceSession) {
             aceSession.setMode(mode.mode);
         });
     },
 
+
+    // event handlers
+    onEditorInput: function() {
+        var me = this,
+            aceEditor = me.aceEditor,
+            aceSession = aceEditor.getSession(),
+            isClean = aceSession.getUndoManager().isClean();
+
+        me.fireEvent('input', me, aceEditor, aceSession);
+
+        if (me.isDirty != !isClean) {
+            me.isDirty = !isClean;
+            me.fireEvent('dirtychange', me, !isClean, aceEditor, aceSession);
+        }
+    },
+
+
+    // public methods
     withEditor: function(onReady, scope) {
         var me = this,
             aceEditor = me.aceEditor;
@@ -120,12 +138,14 @@ Ext.define('Jarvus.ace.Panel', {
         }
     },
 
-    onEditorChange: function() {
-        console.log('onEditorChange', arguments);
-    },
+    loadContent: function(content, callback, scope) {
+        var me = this;
 
-    onEditorUndo: function() {
-        console.log('onEditorUndo', arguments);
+        me.withEditor(function(acePanel, aceEditor, aceSession) {
+            aceSession.setValue(content);
+            me.isDirty = false;
+            Ext.callback(callback, scope || me);
+        })
     },
 
     // setSplit: function(value) {
