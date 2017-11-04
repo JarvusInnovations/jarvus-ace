@@ -3,7 +3,8 @@ Ext.define('Jarvus.ace.Panel', {
     xtype: 'acepanel',
     requires: [
         /* globals Jarvus */
-        'Jarvus.ace.Loader'
+        'Jarvus.ace.Loader',
+        'Jarvus.ace.Util'
     ],
 
 
@@ -67,13 +68,13 @@ Ext.define('Jarvus.ace.Panel', {
     updatePath: function(path, oldPath) {
         var me = this;
 
-        me.setTitle(path ? path.substr(path.lastIndexOf('/') + 1) : me.getInitialConfig('title'));
+        me.setTitle(path ? Jarvus.ace.Util.basename(path) : me.getInitialConfig('title'));
 
         Jarvus.ace.Loader.withAce(function(ace) {
             var aceModelist = ace.require('ace/ext/modelist'),
                 mode;
 
-            mode = aceModelist.modesByName[me.self.extensionModes[path.substr(path.lastIndexOf('.')+1)]];
+            mode = aceModelist.modesByName[me.self.extensionModes[Jarvus.ace.Util.extension(path)]];
 
             if (!mode) {
                 mode = aceModelist.getModeForPath(path);

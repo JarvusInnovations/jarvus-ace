@@ -4,7 +4,8 @@ Ext.define('Jarvus.ace.DiffPanel', {
     requires: [
         /* globals Jarvus */
         'Jarvus.ace.Loader',
-        'Jarvus.ace.Panel'
+        'Jarvus.ace.Panel',
+        'Jarvus.ace.Util'
     ],
 
 
@@ -94,10 +95,6 @@ Ext.define('Jarvus.ace.DiffPanel', {
             });
         }
 
-        if (right && right.path) {
-            me.setTitle(me.getInitialConfig('title') + ': ' + right.path.substr(right.path.lastIndexOf('/') + 1));
-        }
-
         return right;
     },
 
@@ -112,7 +109,7 @@ Ext.define('Jarvus.ace.DiffPanel', {
             var aceModelist = ace.require('ace/ext/modelist'),
                 mode;
 
-            mode = aceModelist.modesByName[Jarvus.ace.Panel.extensionModes[path.substr(path.lastIndexOf('.')+1)]];
+            mode = aceModelist.modesByName[Jarvus.ace.Panel.extensionModes[Jarvus.ace.Util.basename(path)]];
 
             if (!mode) {
                 mode = aceModelist.getModeForPath(path);
@@ -131,6 +128,10 @@ Ext.define('Jarvus.ace.DiffPanel', {
         }
 
         me.ready = true;
+
+        if (right && right.path) {
+            me.setTitle(me.getInitialConfig('title') + ': ' + Jarvus.ace.Util.basename(right.path));
+        }
 
         Jarvus.ace.Loader.withDiff(function(AceDiff) {
             me.differ = new AceDiff({
