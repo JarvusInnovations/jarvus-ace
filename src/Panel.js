@@ -130,7 +130,7 @@ Ext.define('Jarvus.ace.Panel', {
         scope = scope || me;
 
         if (aceEditor) {
-            onReady.call(scope, me, aceEditor, aceEditor.getSession());
+            Ext.callback(onReady, scope, [me, aceEditor, aceEditor.getSession()]);
         } else {
             me.on('editorready', onReady, scope, { single: true });
         }

@@ -98,7 +98,7 @@ Ext.define('Jarvus.ace.Loader', {
         scope = scope || me;
 
         if (me.ready) {
-            onReady.call(scope, window.ace);
+            Ext.callback(onReady, scope, [window.ace]);
         } else {
             me.on('aceready', onReady, scope, { single: true });
         }
