@@ -94,13 +94,7 @@ Ext.define('Jarvus.ace.Panel', {
             iconCls = 'x-fa fa-'+iconCls;
         }
 
-        if (me.tab) {
-            me.tab.setIconCls(iconCls);
-        } else {
-            me.tabConfig = {
-                iconCls: iconCls
-            };
-        }
+        me.setIconCls(iconCls);
 
         me.withEditor(function (acePanel, aceEditor, aceSession) {
             aceSession.setMode(mode.mode);
