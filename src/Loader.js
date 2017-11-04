@@ -42,31 +42,12 @@ Ext.define('Jarvus.ace.Loader', {
     load: function() {
         var me = this,
             modules = me.getModules(),
-            modulesLength = modules.length,
             disableCaching = me.getDisableCaching(),
-            previousDisableCaching,
-            modulesLoaded,
-            onModuleLoaded = function (options) {
-                modulesLoaded.push(options.url);
-
-                if (modulesLoaded.length == modulesLength) {
-                    if (disableCaching !== null) {
-                        Ext.Loader.setConfig('disableCaching', previousDisableCaching);
-                    }
-
-                    me.ready = true;
-                    me.fireEvent('aceready', window.ace);
-                }
-            },
-            onModuleError = function (options) {
-                Ext.Logger.error('Failed to load ace module: '+options.url);
-            };
+            previousDisableCaching;
 
         if (me.ready || me.modulesLoaded) {
             return;
         }
-
-        modulesLoaded = me.modulesLoaded = [];
 
         if (disableCaching !== null) {
             previousDisableCaching = Ext.Loader.getConfig('disableCaching');
@@ -76,15 +57,19 @@ Ext.define('Jarvus.ace.Loader', {
         Ext.Loader.loadScript({
             url: Ext.resolveResource('<@jarvus-ace>ace/ace.js'),
             onLoad: function() {
-                var moduleIndex = 0;
+                Ext.Loader.loadScript({
+                    url: Ext.Array.map(modules, function(module) {
+                        return Ext.resolveResource('<@jarvus-ace>ace/'+module);
+                    }),
+                    onLoad: function() {
+                        if (disableCaching !== null) {
+                            Ext.Loader.setConfig('disableCaching', previousDisableCaching);
+                        }
 
-                for (; moduleIndex < modulesLength; moduleIndex++) {
-                    Ext.Loader.loadScript({
-                        url: Ext.resolveResource('<@jarvus-ace>ace/'+modules[moduleIndex]),
-                        onLoad: onModuleLoaded,
-                        onError: onModuleError
-                    });
-                }
+                        me.ready = true;
+                        me.fireEvent('aceready', window.ace);
+                    }
+                });
             },
             onError: function() {
                 Ext.Logger.error('Failed to load ace');
