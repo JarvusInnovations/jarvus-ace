@@ -92,7 +92,7 @@ Ext.define('Jarvus.ace.Loader', {
         });
     },
 
-    onReady: function(onReady, scope) {
+    withAce: function(onReady, scope) {
         var me = this;
 
         scope = scope || me;

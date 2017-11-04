@@ -36,7 +36,7 @@ Ext.define('Jarvus.ace.Panel', {
 
         me.callParent(arguments);
 
-        Jarvus.ace.Loader.onReady(function(ace) {
+        Jarvus.ace.Loader.withAce(function(ace) {
             var aceEditor = ace.edit(me.getTargetEl().dom),
                 aceSession = aceEditor.getSession();
 
@@ -69,7 +69,7 @@ Ext.define('Jarvus.ace.Panel', {
 
         me.setTitle(path ? path.substr(path.lastIndexOf('/') + 1) : me.getInitialConfig('title'));
 
-        Jarvus.ace.Loader.onReady(function(ace) {
+        Jarvus.ace.Loader.withAce(function(ace) {
             var aceModelist = ace.require('ace/ext/modelist'),
                 mode;
 
@@ -102,12 +102,12 @@ Ext.define('Jarvus.ace.Panel', {
             };
         }
 
-        me.onReady(function (editor, aceEditor, aceSession) {
+        me.withEditor(function (editor, aceEditor, aceSession) {
             aceSession.setMode(mode.mode);
         });
     },
 
-    onReady: function(onReady, scope) {
+    withEditor: function(onReady, scope) {
         var me = this,
             aceEditor = me.aceEditor;
 
