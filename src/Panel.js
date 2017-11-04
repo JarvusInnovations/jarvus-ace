@@ -64,7 +64,7 @@ Ext.define('Jarvus.ace.Panel', {
 
 
     // config handlers
-    updatePath: function(path) {
+    updatePath: function(path, oldPath) {
         var me = this;
 
         me.setTitle(path ? path.substr(path.lastIndexOf('/') + 1) : me.getInitialConfig('title'));
@@ -83,9 +83,11 @@ Ext.define('Jarvus.ace.Panel', {
                 me.setMode(mode);
             }
         });
+
+        me.fireEvent('pathchange', me, path, oldPath);
     },
 
-    updateMode: function(mode) {
+    updateMode: function(mode, oldMode) {
         var me = this,
             modeIcons = me.self.modeIcons,
             iconCls = modeIcons[mode.name] || modeIcons._default;
@@ -99,6 +101,8 @@ Ext.define('Jarvus.ace.Panel', {
         me.withEditor(function (acePanel, aceEditor, aceSession) {
             aceSession.setMode(mode.mode);
         });
+
+        me.fireEvent('modehange', me, mode, oldMode);
     },
 
 
