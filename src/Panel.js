@@ -21,16 +21,6 @@ Ext.define('Jarvus.ace.Panel', {
         displayIndentGuides: true
     },
 
-    statics: {
-        extensionModes: {
-            tpl: 'smarty'
-        },
-        modeIcons: {
-            _default: 'file-code-o',
-            text: 'file-text-o',
-        }
-    },
-
 
     // lifecycle methods
     afterRender: function() {
@@ -70,19 +60,8 @@ Ext.define('Jarvus.ace.Panel', {
 
         me.setTitle(path ? Jarvus.ace.Util.basename(path) : me.getInitialConfig('title'));
 
-        Jarvus.ace.Loader.withAce(function(ace) {
-            var aceModelist = ace.require('ace/ext/modelist'),
-                mode;
-
-            mode = aceModelist.modesByName[me.self.extensionModes[Jarvus.ace.Util.extension(path)]];
-
-            if (!mode) {
-                mode = aceModelist.getModeForPath(path);
-            }
-
-            if (mode) {
-                me.setMode(mode);
-            }
+        Jarvus.ace.Util.modeForPath(path).then(function(mode) {
+            me.setMode(mode);
         });
 
         me.fireEvent('pathchange', me, path, oldPath);
@@ -90,8 +69,7 @@ Ext.define('Jarvus.ace.Panel', {
 
     updateMode: function(mode, oldMode) {
         var me = this,
-            modeIcons = me.self.modeIcons,
-            iconCls = modeIcons[mode.name] || modeIcons._default;
+            iconCls = Jarvus.ace.Util.iconForMode(mode);
 
         if (iconCls) {
             iconCls = 'x-fa fa-'+iconCls;

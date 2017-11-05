@@ -4,7 +4,6 @@ Ext.define('Jarvus.ace.DiffPanel', {
     requires: [
         /* globals Jarvus */
         'Jarvus.ace.Loader',
-        'Jarvus.ace.Panel',
         'Jarvus.ace.Util'
     ],
 
@@ -72,7 +71,7 @@ Ext.define('Jarvus.ace.DiffPanel', {
         var me = this;
 
         if (left && !left.mode && left.path) {
-            me.withModeFromPath(left.path, function(mode) {
+            Jarvus.ace.Util.modeForPath(left.path).then(function(mode) {
                 left.mode = 'ace/mode/'+mode.name;
                 me.loadIfReady();
             });
@@ -89,7 +88,7 @@ Ext.define('Jarvus.ace.DiffPanel', {
         var me = this;
 
         if (right && !right.mode && right.path) {
-            me.withModeFromPath(right.path, function(mode) {
+            Jarvus.ace.Util.modeForPath(right.path).then(function(mode) {
                 right.mode = 'ace/mode/'+mode.name;
                 me.loadIfReady();
             });
@@ -104,21 +103,6 @@ Ext.define('Jarvus.ace.DiffPanel', {
 
 
     // internal methods
-    withModeFromPath: function(path, callback, scope) {
-        Jarvus.ace.Loader.withAce(function(ace) {
-            var aceModelist = ace.require('ace/ext/modelist'),
-                mode;
-
-            mode = aceModelist.modesByName[Jarvus.ace.Panel.extensionModes[Jarvus.ace.Util.basename(path)]];
-
-            if (!mode) {
-                mode = aceModelist.getModeForPath(path);
-            }
-
-            Ext.callback(callback, scope, [mode]);
-        });
-    },
-
     loadIfReady: function() {
         var me = this,
             left, right;
@@ -129,9 +113,12 @@ Ext.define('Jarvus.ace.DiffPanel', {
 
         me.ready = true;
 
-        if (right && right.path) {
-            me.setTitle(me.getInitialConfig('title') + ': ' + Jarvus.ace.Util.basename(right.path));
-        }
+        me.setTitle(Ext.String.format(
+            '{0} ({1}&rarr;{2})',
+            Jarvus.ace.Util.basename(right.path),
+            left.revision,
+            right.revision
+        ));
 
         Jarvus.ace.Loader.withDiff(function(AceDiff) {
             me.differ = new AceDiff({
