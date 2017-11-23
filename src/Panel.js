@@ -10,6 +10,7 @@ Ext.define('Jarvus.ace.Panel', {
 
     config: {
         path: null,
+        revision: null,
         line: null,
 
         mode: null,
@@ -58,13 +59,42 @@ Ext.define('Jarvus.ace.Panel', {
     updatePath: function(path, oldPath) {
         var me = this;
 
-        me.setTitle(path ? Jarvus.ace.Util.basename(path) : me.getInitialConfig('title'));
+        me.syncTitle();
 
         Jarvus.ace.Util.modeForPath(path).then(function(mode) {
             me.setMode(mode);
         });
 
         me.fireEvent('pathchange', me, path, oldPath);
+    },
+
+    updateRevision: function() {
+        this.syncTitle();
+    },
+
+    applyLine: function(line) {
+        return parseInt(line, 10) || null;
+    },
+
+    updateLine: function(line) {
+        var me = this,
+            highlightedLineRange = me.highlightedLineRange;
+
+        me.withEditor(function(acePanel, aceEditor, aceSession) {
+            if (highlightedLineRange) {
+                aceSession.removeMarker(highlightedLineRange.id);
+            }
+
+            if (!line) {
+                return;
+            }
+
+            me.highlightedLineRange = aceSession.highlightLines(line, line);
+
+            if (me.contentLoaded) {
+                aceEditor.scrollToLine(line, true, true);
+            }
+        });
     },
 
     updateMode: function(mode, oldMode) {
@@ -116,11 +146,18 @@ Ext.define('Jarvus.ace.Panel', {
     },
 
     loadContent: function(content, callback, scope) {
-        var me = this;
+        var me = this,
+            line = me.getLine();
 
         me.withEditor(function(acePanel, aceEditor, aceSession) {
             aceSession.setValue(content);
             me.dirty = false;
+            me.contentLoaded = true;
+
+            if (line) {
+                aceEditor.scrollToLine(line, true, true);
+            }
+
             Ext.callback(callback, scope || me);
         });
     },
@@ -146,7 +183,20 @@ Ext.define('Jarvus.ace.Panel', {
             me.fireEvent('dirtychange', me, false, aceEditor, aceSession);
             Ext.callback(callback, scope || me);
         });
-    }
+    },
+
+    syncTitle: function() {
+        var me = this,
+            path = me.getPath(),
+            revision = me.getRevision(),
+            title = path ? Jarvus.ace.Util.basename(path) : me.getInitialConfig('title');
+
+        if (revision) {
+            title += '@' + revision;
+        }
+
+        me.setTitle(title);
+    },
 
     // setSplit: function(value) {
     //     var sp = this.split;
