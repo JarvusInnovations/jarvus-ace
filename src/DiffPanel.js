@@ -84,6 +84,14 @@ Ext.define('Jarvus.ace.DiffPanel', {
 
             // fire differready event
             me.fireEvent('differready', me, differ);
+
+            // attach resize
+            me.on('resize', function() {
+                var editors = differ.editors;
+
+                editors.left.ace.resize();
+                editors.right.ace.resize();
+            }, null, { buffer: 250 });
         });
     },
 

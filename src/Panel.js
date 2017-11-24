@@ -48,6 +48,11 @@ Ext.define('Jarvus.ace.Panel', {
 
             // fire editorready event
             me.fireEvent('editorready', me, aceEditor, aceSession);
+
+            // attach resize
+            me.on('resize', function() {
+                aceEditor.resize();
+            }, null, { buffer: 250 });
         });
     },
 
