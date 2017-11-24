@@ -9,8 +9,13 @@ Ext.define('Jarvus.ace.DiffPanel', {
 
 
     config: {
-        left: null,
-        right: null,
+        leftPath: null,
+        leftRevision: null,
+        leftMode: null,
+
+        rightPath: null,
+        rightRevision: null,
+        rightMode: null,
 
         theme: 'ace/theme/monokai',
         tabSize: 4,
@@ -51,92 +56,131 @@ Ext.define('Jarvus.ace.DiffPanel', {
 
 
     // lifecycle methods
-    constructor: function() {
-        this.ready = false;
-
-        this.callParent(arguments);
-    },
-
     afterRender: function() {
         var me = this;
 
         me.callParent(arguments);
 
-        Jarvus.ace.Loader.withDiff(me.loadIfReady, me);
-    },
-
-
-    // config handlers
-    applyLeft: function(left) {
-        var me = this;
-
-        if (left && !left.mode && left.path) {
-            Jarvus.ace.Util.modeForPath(left.path).then(function(mode) {
-                left.mode = 'ace/mode/'+mode.name;
-                me.loadIfReady();
-            });
-        }
-
-        return left;
-    },
-
-    updateLeft: function(left, oldLeft) {
-        this.fireEvent('leftchange', this, left, oldLeft);
-    },
-
-    applyRight: function(right) {
-        var me = this;
-
-        if (right && !right.mode && right.path) {
-            Jarvus.ace.Util.modeForPath(right.path).then(function(mode) {
-                right.mode = 'ace/mode/'+mode.name;
-                me.loadIfReady();
-            });
-        }
-
-        return right;
-    },
-
-    updateRight: function(right, oldRight) {
-        this.fireEvent('rightchange', this, right, oldRight);
-    },
-
-
-    // internal methods
-    loadIfReady: function() {
-        var me = this,
-            left, right;
-
-        if (me.ready || !me.rendered || !(left = me.getLeft()) || !(right = me.getRight())) {
-            return;
-        }
-
-        me.ready = true;
-
-        me.setTitle(Ext.String.format(
-            '{0} ({1}&rarr;{2})',
-            Jarvus.ace.Util.basename(right.path),
-            left.revision,
-            right.revision
-        ));
-
+        // TODO: use Jarvus.ace.Panel instances with managed themes
         Jarvus.ace.Loader.withDiff(function(AceDiff) {
-            me.differ = new AceDiff({
+            var differ = new AceDiff({
                 theme: me.getTheme(),
-                left: Ext.applyIf({
+                left: {
                     el: me.getComponent('editor-left').el.dom,
                     editable: false,
                     copyLinkEnabled: false
-                }, left),
-                right: Ext.applyIf({
+                },
+                right: {
                     el: me.getComponent('editor-right').el.dom,
                     editable: false,
                     copyLinkEnabled: false
-                }, right),
+                },
                 gutter: {
                     el: me.getComponent('gutter').el.dom
                 }
             });
+
+            me.differ = differ;
+
+            // fire differready event
+            me.fireEvent('differready', me, differ);
         });
+    },
+
+
+    // config handlers
+    updateLeftPath: function(path, oldPath) {
+        var me = this,
+            mode = me.getLeftMode();
+
+        me.syncTitle();
+
+        me.fireEvent('leftpathchange', me, path, oldPath);
+
+        // set mode from path
+        if (path && !mode) {
+            Jarvus.ace.Util.modeForPath(path).then(function(resolvedMode) {
+                me.setLeftMode('ace/mode/'+resolvedMode.name);
+            });
+        }
+    },
+
+    updateLeftRevision: function(revision, oldRevision) {
+        var me = this;
+
+        me.syncTitle();
+
+        me.fireEvent('leftrevisionchange', me, revision, oldRevision);
+    },
+
+    updateLeftMode: function(mode, oldMode) {
+        this.fireEvent('leftmodechange', this, mode, oldMode);
+    },
+
+    updateRightPath: function(path, oldPath) {
+        var me = this,
+            mode = me.getRightMode();
+
+        me.syncTitle();
+
+        me.fireEvent('rightpathchange', me, path, oldPath);
+
+        // set mode from path
+        if (path && !mode) {
+            Jarvus.ace.Util.modeForPath(path).then(function(resolvedMode) {
+                me.setRightMode('ace/mode/'+resolvedMode.name);
+            });
+        }
+    },
+
+    updateRightRevision: function(revision, oldRevision) {
+        var me = this;
+
+        me.syncTitle();
+
+        me.fireEvent('rightrevisionchange', me, revision, oldRevision);
+    },
+
+    updateRightMode: function(mode, oldMode) {
+        this.fireEvent('rightmodechange', this, mode, oldMode);
+    },
+
+
+    // local methods
+    withDiffer: function(onReady, scope) {
+        var me = this,
+            differ = me.differ;
+
+        scope = scope || me;
+
+        if (differ) {
+            Ext.callback(onReady, scope, [me, differ]);
+        } else {
+            me.on('differready', onReady, scope, { single: true });
+        }
+    },
+
+    loadContent: function(leftContent, rightContent, callback, scope) {
+        var me = this;
+
+        me.withDiffer(function(diffPanel, differ) {
+            var editors = differ.editors;
+
+            editors.left.ace.setValue(leftContent, -1);
+            editors.right.ace.setValue(rightContent, -1);
+
+            Ext.callback(callback, scope || me);
+        });
+    },
+
+    syncTitle: function() {
+        var me = this;
+
+        me.setTitle(Ext.String.format(
+            '{0} ({1}&rarr;{2})',
+            Jarvus.ace.Util.basename(me.getRightPath()),
+            me.getLeftRevision(),
+            me.getRightRevision()
+        ));
     }
 });
