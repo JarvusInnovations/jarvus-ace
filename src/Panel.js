@@ -46,9 +46,6 @@ Ext.define('Jarvus.ace.Panel', {
             // listen for changes to mark dirty
             aceEditor.on('input', Ext.bind(me.onEditorInput, me));
 
-            // disable built in find dialog
-            aceEditor.commands.removeCommand('find');
-
             // fire editorready event
             me.fireEvent('editorready', me, aceEditor, aceSession);
         });
