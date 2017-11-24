@@ -114,7 +114,13 @@ Ext.define('Jarvus.ace.DiffPanel', {
     },
 
     updateLeftMode: function(mode, oldMode) {
-        this.fireEvent('leftmodechange', this, mode, oldMode);
+        var me = this;
+
+        me.withDiffer(function(diffPanel, differ) {
+            differ.editors.left.ace.getSession().setMode(mode)
+        });
+
+        me.fireEvent('leftmodechange', me, mode, oldMode);
     },
 
     updateRightPath: function(path, oldPath) {
@@ -142,7 +148,13 @@ Ext.define('Jarvus.ace.DiffPanel', {
     },
 
     updateRightMode: function(mode, oldMode) {
-        this.fireEvent('rightmodechange', this, mode, oldMode);
+        var me = this;
+
+        me.withDiffer(function(diffPanel, differ) {
+            differ.editors.right.ace.getSession().setMode(mode)
+        });
+
+        me.fireEvent('rightmodechange', me, mode, oldMode);
     },
 
 
