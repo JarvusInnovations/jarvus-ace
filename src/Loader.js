@@ -9,9 +9,9 @@ Ext.define('Jarvus.ace.Loader', {
         autoLoad: true,
         disableCaching: false,
         modules: [
-            'ext-modelist',
-            'ext-searchbox',
-            'ext-whitespace',
+            'ext-modelist.js',
+            'ext-searchbox.js',
+            'ext-whitespace.js',
             'mode-html.js',
             'mode-php.js',
             'mode-javascript.js',
