@@ -27,6 +27,11 @@ Ext.define('Jarvus.ace.Loader', {
             'mode-sql.js',
             'mode-markdown.js',
             'mode-jsx.js',
+            'worker-css.js',
+            'worker-html.js',
+            'worker-javascript.js',
+            'worker-json.js',
+            'worker-php.js',
             'theme-monokai.js'
         ]
     },
