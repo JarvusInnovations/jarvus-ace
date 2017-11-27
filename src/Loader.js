@@ -39,7 +39,7 @@ Ext.define('Jarvus.ace.Loader', {
         me.mixins.observable.constructor.call(me, config);
 
         if (me.getAutoLoad()) {
-            me.load();
+            Ext.onReady(me.load, me);
         }
     },
 
