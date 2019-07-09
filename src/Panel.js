@@ -14,7 +14,7 @@ Ext.define('Jarvus.ace.Panel', {
         line: null,
 
         mode: null,
-        theme: 'ace/theme/monokai',
+        theme: 'ace/theme/tomorrow_night_bright',
         tabSize: 4,
         softTabs: true,
         showPrintMargin: false,
