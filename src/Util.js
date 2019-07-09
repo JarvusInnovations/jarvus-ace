@@ -13,8 +13,8 @@ Ext.define('Jarvus.ace.Util', {
     },
 
     modeIcons: {
-        default: 'file-code-o',
-        text: 'file-text-o',
+        default: 'code',
+        text: 'file-text',
     },
 
     modeForPath: function(path) {
