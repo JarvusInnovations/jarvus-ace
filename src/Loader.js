@@ -32,7 +32,7 @@ Ext.define('Jarvus.ace.Loader', {
             'worker-javascript.js',
             'worker-json.js',
             'worker-php.js',
-            'theme-monokai.js'
+            'theme-tomorrow_night_bright.js'
         ]
     },
 
