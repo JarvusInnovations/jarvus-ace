@@ -17,7 +17,7 @@ Ext.define('Jarvus.ace.DiffPanel', {
         rightRevision: null,
         rightMode: null,
 
-        theme: 'ace/theme/monokai',
+        theme: 'ace/theme/tomorrow_night_bright',
         tabSize: 4,
         softTabs: true,
         showPrintMargin: false,
